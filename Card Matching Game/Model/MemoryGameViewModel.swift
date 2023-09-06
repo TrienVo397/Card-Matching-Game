@@ -12,6 +12,8 @@ class MemoryGameViewModel: ObservableObject {
     @Published var remainingTime: Int
     private var gameMode: GameMode
     private var timer: Timer?
+    @Published var playerName: String = ""
+
 
     init(gameMode: GameMode) {
         self.gameMode = gameMode
@@ -44,7 +46,11 @@ class MemoryGameViewModel: ObservableObject {
         self.remainingTime = gameMode.timeLimit
         startTimer()
     }
-    
+    func savePlayerScore() {
+            let playerScore = PlayerScore(name: playerName, score: score)
+            UserDefaults().savePlayerScore(playerScore)
+        }
+
     private func startTimer() {
         timer?.invalidate() // invalidate any existing timer
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in

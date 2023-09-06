@@ -11,22 +11,22 @@ struct PlayerScore: Codable {
     var score: Int
 }
 
-class DataManager {
-    static let playerScoresKey = "PlayerScores"
-
-    static func save(_ playerScore: PlayerScore) {
-        var scores = fetchAllScores()
-        scores.append(playerScore)
-        if let encodedData = try? JSONEncoder().encode(scores) {
-            UserDefaults.standard.set(encodedData, forKey: playerScoresKey)
+extension UserDefaults {
+    func savePlayerScore(_ playerScore: PlayerScore) {
+        var playerScores = getPlayerScores() ?? []
+        playerScores.append(playerScore)
+        if let encodedData = try? JSONEncoder().encode(playerScores) {
+            UserDefaults.standard.set(encodedData, forKey: "playerScores")
         }
     }
-
-    static func fetchAllScores() -> [PlayerScore] {
-        if let savedData = UserDefaults.standard.data(forKey: playerScoresKey),
-           let decodedScores = try? JSONDecoder().decode([PlayerScore].self, from: savedData) {
-            return decodedScores
+    
+    func getPlayerScores() -> [PlayerScore]? {
+        if let savedData = UserDefaults.standard.data(forKey: "playerScores"),
+           let decodedData = try? JSONDecoder().decode([PlayerScore].self, from: savedData) {
+            return decodedData
         }
-        return []
+        return nil
     }
 }
+
+

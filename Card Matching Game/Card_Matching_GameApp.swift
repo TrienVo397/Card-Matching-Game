@@ -11,7 +11,7 @@ import SwiftUI
 struct Card_Matching_GameApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MenuView()
         }
     }
 }

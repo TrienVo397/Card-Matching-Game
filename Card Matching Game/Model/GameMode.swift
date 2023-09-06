@@ -14,8 +14,8 @@ enum GameMode: String, CaseIterable {
     var timeLimit: Int {
         switch self {
         case .easy: return 60
-        case .medium: return 40
-        case .hard: return 20
+        case .medium: return 45
+        case .hard: return 25
         }
     }
 

@@ -3,6 +3,7 @@ import SwiftUI
 struct MenuView: View {
     @State private var selectedGameMode: GameMode = .easy
     @State private var isShowingGameView: Bool = false
+    @State private var isShowingNamePrompt: Bool = false
     @State private var playerName: String = ""
 
     var body: some View {
@@ -11,29 +12,35 @@ struct MenuView: View {
                 Text("Memory Card Matching Game")
                     .font(.largeTitle)
                     .padding()
+                TextField("Enter your name", text: $playerName)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.2))
+                                    .cornerRadius(8)
+                                    .padding(.horizontal)
 
                 Button(action: {
-                    isShowingGameView.toggle()
-                }) {
-                    Text("Start Game")
-                        .font(.headline)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .sheet(isPresented: $isShowingGameView) {
-                    EmojiMemoryGameView(viewModel: MemoryGameViewModel(gameMode: selectedGameMode), playerName: $playerName)
-                }
-
-                NavigationLink(destination: Text("Leaderboard View")) {
-                    Text("Leaderboard")
-                        .font(.headline)
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
+                                    isShowingGameView = true
+                                }) {
+                                    Text("Start Game")
+                                        .font(.headline)
+                                        .padding()
+                                        .background(Color.blue)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
+                                .disabled(playerName.isEmpty)
+                                .opacity(playerName.isEmpty ? 0.5 : 1.0)
+                                .sheet(isPresented: $isShowingGameView) {
+                                    EmojiMemoryGameView(viewModel: MemoryGameViewModel(gameMode: selectedGameMode), playerName: $playerName)
+                                }
+                NavigationLink(destination: LeaderBoardView()) {
+                                    Text("Leaderboard")
+                                        .font(.headline)
+                                        .padding()
+                                        .background(Color.green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
 
                 NavigationLink(destination: Text("How To Play View")) {
                     Text("How To Play")
@@ -79,5 +86,10 @@ struct GameSettingsView: View {
 
             Spacer()
         }
+    }
+}
+struct MenuView_Previews: PreviewProvider {
+    static var previews: some View {
+        MenuView()
     }
 }

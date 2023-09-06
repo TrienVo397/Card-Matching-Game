@@ -38,6 +38,11 @@ struct EmojiMemoryGameView: View {
                 }
                 .padding(5)
             }
+            .onChange(of: viewModel.cards.allSatisfy({ $0.isMatched })) { allMatched in
+                if allMatched {
+                    viewModel.savePlayerScore()
+                }
+            }
             .padding()
             .foregroundColor(Color.orange) // Adjust the color as per your theme
             
