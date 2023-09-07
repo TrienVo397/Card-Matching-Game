@@ -5,26 +5,34 @@
 //  Created by Người dùng Khách on 06/09/2023.
 //
 
-import Foundation
 import SwiftUI
+
 struct LeaderBoardView: View {
-    var playerScores: [PlayerScore] = UserDefaults().getPlayerScores() ?? []
+    @State private var playerScores: [PlayerScore] = UserDefaults.standard.getPlayerScores() ?? []
 
     var body: some View {
         NavigationView {
-            List(playerScores, id: \.name) { playerScore in
-                HStack {
-                    Text(playerScore.name)
-                        .font(.headline)
-                    Spacer()
-                    Text("\(playerScore.score)")
-                        .font(.subheadline)
+            List {
+                ForEach(playerScores.sorted(by: { $0.score > $1.score }).prefix(10), id: \.id) { player in
+                    HStack {
+                        Text(player.name)
+                            .font(.headline)
+                        Spacer()
+                        Text("Score: \(player.score)")
+                        Text("Games Played: \(player.gamesPlayed)")
+                    }
                 }
             }
-            .navigationTitle("Leaderboard")
+            .navigationBarTitle("Leaderboard", displayMode: .inline)
+        }
+        .onAppear {
+            // Refresh the scores when the view appears
+            playerScores = UserDefaults.standard.getPlayerScores() ?? []
+            print(playerScores)
         }
     }
 }
+
 
 struct LeaderBoardView_Previews: PreviewProvider {
     static var previews: some View {

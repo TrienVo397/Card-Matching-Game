@@ -31,7 +31,7 @@ struct MenuView: View {
                                 .disabled(playerName.isEmpty)
                                 .opacity(playerName.isEmpty ? 0.5 : 1.0)
                                 .sheet(isPresented: $isShowingGameView) {
-                                    EmojiMemoryGameView(viewModel: MemoryGameViewModel(gameMode: selectedGameMode), playerName: $playerName)
+                                    EmojiMemoryGameView(viewModel: MemoryGameViewModel(gameMode: selectedGameMode, playerName: playerName), playerName: $playerName)
                                 }
                 NavigationLink(destination: LeaderBoardView()) {
                                     Text("Leaderboard")

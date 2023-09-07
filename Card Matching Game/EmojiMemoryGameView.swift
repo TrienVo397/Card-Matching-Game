@@ -13,6 +13,20 @@ struct EmojiMemoryGameView: View {
     var body: some View {
         VStack {
             HStack {
+                switch viewModel.gameState {
+                            case .playing:
+                                EmptyView() // No message while playing
+                            case .won:
+                                Text("You Win!")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.green)
+                                    .padding()
+                            case .lost:
+                                Text("Game Over!")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.red)
+                                    .padding()
+                            }
                 Text("Time: \(viewModel.remainingTime)")
                     .font(.headline)
                     .padding()
@@ -38,11 +52,7 @@ struct EmojiMemoryGameView: View {
                 }
                 .padding(5)
             }
-            .onChange(of: viewModel.cards.allSatisfy({ $0.isMatched })) { allMatched in
-                if allMatched {
-                    viewModel.savePlayerScore()
-                }
-            }
+            
             .padding()
             .foregroundColor(Color.orange) // Adjust the color as per your theme
             
@@ -90,6 +100,6 @@ struct CardView: View {
 }
 struct EmojiMemoryGameView_Previews: PreviewProvider {
     static var previews: some View {
-        EmojiMemoryGameView(viewModel: MemoryGameViewModel(gameMode: .easy), playerName: .constant("John Doe"))
+        EmojiMemoryGameView(viewModel: MemoryGameViewModel(gameMode: .easy, playerName: "John Doe"), playerName: .constant("John Doe"))
     }
 }
