@@ -15,7 +15,7 @@ struct EmojiMemoryGameView: View {
             HStack {
                 switch viewModel.gameState {
                             case .playing:
-                                EmptyView() // No message while playing
+                                EmptyView() 
                             case .won:
                                 Text("You Win!")
                                     .font(.largeTitle)

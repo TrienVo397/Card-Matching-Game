@@ -11,7 +11,7 @@ struct LeaderBoardView: View {
     @State private var playerScores: [PlayerScore] = UserDefaults.standard.getPlayerScores() ?? []
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(playerScores.sorted(by: { $0.score > $1.score }).prefix(10), id: \.id) { player in
                     HStack {

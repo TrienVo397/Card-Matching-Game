@@ -26,6 +26,7 @@ class MemoryGameViewModel: ObservableObject {
         model = MemoryGameViewModel.createMemoryGame(gameMode: gameMode)
         self.remainingTime = gameMode.timeLimit
         startTimer()
+        savePlayerScore()
     }
 
     private static func createMemoryGame(gameMode: GameMode) -> MemoryGame<String> {
@@ -53,6 +54,7 @@ class MemoryGameViewModel: ObservableObject {
         model = MemoryGameViewModel.createMemoryGame(gameMode: gameMode)
         self.remainingTime = gameMode.timeLimit
         startTimer()
+        savePlayerScore()
     }
     
     private func startTimer() {
@@ -76,22 +78,28 @@ class MemoryGameViewModel: ObservableObject {
         var playerScores = UserDefaults.standard.getPlayerScores() ?? []
         if let index = playerScores.firstIndex(where: { $0.name == playerName }) {
             var player = playerScores[index]
-            if score > player.score {
-                player.score = score
-            }
-            player.gamesPlayed += 1
+            
+            // Only update the score if the game was won
             if gameState == .won {
+                if score > player.score {
+                    player.score = score
+                }
                 player.gamesWon += 1
             }
+            
+            player.gamesPlayed += 1
             player.badges = updateBadges(for: player)
             playerScores[index] = player
         } else {
-            let newPlayer = PlayerScore(name: playerName, score: score, gamesPlayed: 1, gamesWon: gameState == .won ? 1 : 0, badges: [])
+            let newPlayer = PlayerScore(name: playerName, score: gameState == .won ? score : 0, gamesPlayed: 1, gamesWon: gameState == .won ? 1 : 0, badges: [])
             playerScores.append(newPlayer)
         }
         UserDefaults.standard.savePlayerScores(playerScores)
     }
 
+
+    
+    
     private func updateBadges(for player: PlayerScore) -> [Badge] {
         var badges = player.badges
         switch gameMode {
