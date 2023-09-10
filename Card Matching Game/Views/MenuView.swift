@@ -3,8 +3,11 @@ import SwiftUI
 struct MenuView: View {
     @State private var selectedGameMode: GameMode = .easy
     @State private var isShowingGameView: Bool = false
-    @State private var isShowingNamePrompt: Bool = false
     @State private var playerName: String = ""
+
+    // Define a fixed size for all buttons
+    let buttonWidth: CGFloat =  130
+    let buttonHeight: CGFloat = 20
 
     var body: some View {
         NavigationStack {
@@ -12,8 +15,10 @@ struct MenuView: View {
                 Image("greenBg")
                     .resizable()
                     .ignoresSafeArea()
-                VStack(spacing: 20) {
+                    .frame(width: UIScreen.main.bounds.width)
+                VStack(spacing: 30) {
                     Spacer()
+                        
                     Image("cardmemory")
                         .resizable()
                         .padding(.horizontal, 20.0)
@@ -24,66 +29,78 @@ struct MenuView: View {
                         .padding(.horizontal,20)
                     
                     Spacer()
-                    TextField("Enter your name to play", text: $playerName)
+                    TextField("Enter your name to start", text: $playerName)
+                        .frame(width: 200, height: 20)
                         .multilineTextAlignment(.center)
-                                        .padding()
-                                        .background(Color.white.opacity(0.4))
-                                        .cornerRadius(8)
-                                        .padding(.horizontal)
-                                        .frame(width: 300, height: 100)
+                        .padding()
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(8)
+                        .padding(.horizontal)
+                        
                     
-
                     Button(action: {
-                                        isShowingGameView = true
-                                    }) {
-                                        Text("START GAME")
-                                            .font(.headline)
-                                            .padding()
-                                            .background(Color.blue)
-                                            .foregroundColor(.white)
-                                            .cornerRadius(20)
-                                    }
+                        isShowingGameView = true
+                    }) {
+                        Text("START GAME")
+                            .frame(width: buttonWidth, height: buttonHeight)
+                            .font(.headline)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(20)
+                            .frame(width: buttonWidth, height: buttonHeight)
+                    }
                     
-                    
-                                    .disabled(playerName.isEmpty)
-                                    .opacity(playerName.isEmpty ? 0.3 : 1.0)
-                                    .sheet(isPresented: $isShowingGameView) {
-                                        EmojiMemoryGameView(viewModel: MemoryGameViewModel(gameMode: selectedGameMode, playerName: playerName), playerName: $playerName)
-                                    }
+                    .disabled(playerName.isEmpty)
+                    .opacity(playerName.isEmpty ? 0.3 : 1.0)
+                    .fullScreenCover(isPresented: $isShowingGameView) {
+                        EmojiMemoryGameView(viewModel: MemoryGameViewModel(gameMode: selectedGameMode, playerName: playerName), playerName: $playerName)
+                    }
+
                     NavigationLink(destination: LeaderBoardView()) {
-                                        Text("LEADERBOARD")
-                                            .font(.headline)
-                                            .padding()
-                                            .background(Color.green)
-                                            .foregroundColor(.white)
-                                            .cornerRadius(20)
-                                    }
+                        Text("LEADERBOARD")
+                            .frame(width: buttonWidth, height: buttonHeight)
+                            .font(.headline)
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(20)
+                            
+                    }
+                    
 
                     NavigationLink(destination: Text("How To Play View")) {
                         Text("HOW TO PLAY")
+                            .frame(width: buttonWidth, height: buttonHeight)
                             .font(.headline)
                             .padding()
                             .background(Color.orange)
                             .foregroundColor(.white)
                             .cornerRadius(20)
+                            
                     }
+                    .frame(width: buttonWidth, height: buttonHeight)
 
                     NavigationLink(destination: GameSettingsView(selectedGameMode: $selectedGameMode)) {
                         Text("SETTINGS")
+                            .frame(width: buttonWidth, height: buttonHeight)
                             .font(.headline)
                             .padding()
                             .background(Color.purple)
                             .foregroundColor(.white)
                             .cornerRadius(20)
+                            
                     }
+                    
 
                     Spacer()
                 }
-                .padding()
+                
             }
         }
     }
 }
+
 
 struct GameSettingsView: View {
     @Binding var selectedGameMode: GameMode
